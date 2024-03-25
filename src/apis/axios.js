@@ -16,3 +16,17 @@ export const instanceWithToken = axios.create({
     Authorization: `${new Cookies().get('accessToken')}`,
   },
 });
+
+// interceptor로 해야함
+instanceWithToken.interceptors.request.use(
+  (config) => {
+    const token = `${new Cookies().get('accessToken')}`;
+    if (token) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
